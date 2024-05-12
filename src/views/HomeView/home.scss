@@ -1,0 +1,40 @@
+.form-control {
+    &:focus {
+        background-color: #2f2f2f !important;
+        color: white;
+    }
+}
+
+.search_home {
+    input {
+        background-color: #2f2f2f;
+        color: white;
+    }
+    span {
+        background-color: #2f2f2f;
+        color: white;
+    }
+}
+
+.search_warning {
+    color: #cdcdcd;
+}
+
+.chathome_item {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    border-radius: 0.75rem;
+
+    background-color: #2f2f2f;
+
+    border-color: hsla(0, 0%, 100%, 0.15);
+    border-width: 1px;
+
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    &:hover {
+        background-color: #2f2f2f;
+    }
+}

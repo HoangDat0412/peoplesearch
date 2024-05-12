@@ -1,0 +1,50 @@
+.formlogin {
+    background-color: rgba(255, 255, 255, 1);
+    width: 400px;
+    color: rgba(0, 0, 0, 1);
+    height: 100%;
+    border-radius: 25px;
+    padding: 20px 25px;
+    .form_content {
+        padding: 20px;
+        h1 {
+            font-family: Lato;
+            font-size: 50px;
+            font-weight: 500;
+            line-height: 77px;
+            letter-spacing: 0em;
+            text-align: left;
+        }
+        p {
+            font-family: Lato;
+            font-size: 22px;
+            font-weight: 400;
+            line-height: 29px;
+            letter-spacing: 0em;
+            text-align: left;
+        }
+
+        .btn-login {
+            border: 1px solid rgba(217, 217, 217, 1);
+            width: 100%;
+            padding: 10px 20px;
+            background: transparent;
+            border-radius: 10px;
+        }
+        .inputlogin {
+            border: 1px solid rgba(217, 217, 217, 1);
+            width: 100%;
+            padding: 10px 20px;
+            background: transparent;
+            border-radius: 10px;
+        }
+        .btn_login {
+            background-color: rgba(12, 28, 61, 1);
+            width: 100%;
+            padding: 10px 20px;
+            color: rgba(255, 255, 255, 1);
+            border-radius: 50px;
+            border: none;
+        }
+    }
+}
