@@ -1,69 +1,50 @@
 <script setup>
 import { ref } from 'vue'
 import './personalnote.scss'
+import moment from 'moment'
+import { useNoteStore } from '@/stores/note'
+// import { notify } from '@kyvg/vue3-notification'
+const props = defineProps(['item'])
+import ModelEditNote from '@/components/ModelEditNote/ModelEditNote.vue'
+let item = props.item
 const isEdit = ref(false)
+const note = ref(item?.title || 'Note')
+const content = ref(item?.content)
+// const relatedtopic = ref(item?.relatedtopic || 1)
+const usenote = useNoteStore()
 
-const note = ref('Xin chào tất cả mọi người, chúc mọi người có một tuần lễ vui vẻ bên gia đình')
-const relatedtopic = ref('Topic 1')
-const handleUpdateNote = () => {
-  console.log(note.value)
-  isEdit.value = false
-}
-
-const handleEdit = () => {
-  isEdit.value = true
+const handleDelete = () => {
+  usenote.DeleteNote(item?.id)
 }
 </script>
 <template>
   <main>
-    <div class="mb-3" v-if="!isEdit">
-      <div class="d-flex justify-between">
-        <p style="font-size: 13px; font-style: italic">20:20 - 20/11/2023</p>
-        <div>
-          <font-awesome-icon
-            class="me-2"
-            style="color: white; font-size: 15px"
-            icon="fa-solid fa-pen-to-square"
-            @click="() => handleEdit()"
-          />
-          <font-awesome-icon
-            class=""
-            style="color: white; font-size: 15px"
-            icon="fa-solid fa-trash"
-          />
+    <div class="mb-4" v-if="!isEdit">
+      <div class="card note-card">
+        <div class="card note-card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <p class="">{{ note }} - {{ moment(item?.created_at).format('MMM Do YY') }}</p>
+          </div>
+          <div class="card-body">
+            <h6>{{ content }}</h6>
+          </div>
+          <div class="card-footer text-right">
+            <button
+              class="btn btn-outline-secondary btn-sm"
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#ModelUpdateNote"
+            >
+              <i class="far fa-edit"></i> Edit
+            </button>
+            <button class="btn btn-outline-danger btn-sm" @click="() => handleDelete()">
+              <i class="far fa-trash-alt"></i> Delete
+            </button>
+          </div>
         </div>
       </div>
-      <p class="mt-1">
-        {{ note }}
-      </p>
-      <p class="mt-1">Reated topic: {{ relatedtopic }}</p>
     </div>
-    <div class="mb-3" v-else>
-      <div class="d-flex justify-between">
-        <p style="font-size: 13px; font-style: italic">Note at 20:20 - 20/11/2023</p>
-        <div>
-          <font-awesome-icon
-            class="me-2"
-            style="color: white; font-size: 15px"
-            icon="fa-solid fa-check"
-            @click="() => handleUpdateNote()"
-          />
-          <font-awesome-icon
-            class=""
-            style="color: white; font-size: 15px"
-            icon="fa-solid fa-trash"
-          />
-        </div>
-      </div>
-      <textarea
-        class="form-control bg-dark text-light mt-1 scrollbar"
-        v-model="note"
-        style="height: 80px; font-size: 14px"
-      ></textarea>
-      <span class="mt-2 d-flex"
-        >Reated topic:
-        <input type="text" v-model="relatedtopic" class="ms-2 form-control form_input_title"
-      /></span>
-    </div>
+
+    <ModelEditNote :note="item" />
   </main>
 </template>

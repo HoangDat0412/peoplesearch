@@ -7,12 +7,41 @@
 
 .search_home {
     input {
-        background-color: #2f2f2f;
+        background-color: #424242;
+        border-radius: 20px;
         color: white;
+        border: none;
+        box-shadow:
+            rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+            rgba(27, 31, 35, 0.15) 0px 0px 0px 1px !important;
+        &:focus {
+            background-color: #424242 !important;
+            box-shadow:
+                rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+                rgba(27, 31, 35, 0.15) 0px 0px 0px 1px !important;
+        }
     }
     span {
-        background-color: #2f2f2f;
+        cursor: pointer;
+        box-shadow:
+            rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+            rgba(27, 31, 35, 0.15) 0px 0px 0px 1px !important;
+        border: none;
+        border-radius: 20px;
+        background-color: #424242;
         color: white;
+    }
+
+    .spinner-border {
+        display: inline-block;
+        width: 1.5rem;
+        height: 1.5rem;
+        vertical-align: -0.125e;
+        border: 0.15em solid currentColor;
+        border-right-color: transparent;
+        border-radius: 50%;
+        -webkit-animation: 0.75s linear infinite spinner-border;
+        animation: 0.75s linear infinite spinner-border;
     }
 }
 
@@ -21,6 +50,7 @@
 }
 
 .chathome_item {
+    cursor: pointer;
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
     padding-left: 1rem !important;
@@ -34,7 +64,8 @@
 
     font-size: 0.875rem;
     line-height: 1.25rem;
+    transition: all 0.3s;
     &:hover {
-        background-color: #2f2f2f;
+        background-color: #424242;
     }
 }

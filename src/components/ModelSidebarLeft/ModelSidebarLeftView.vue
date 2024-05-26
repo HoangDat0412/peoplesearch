@@ -2,8 +2,18 @@
 import { useShowStore } from '@/stores/show.js'
 import ChatTitle from '../ChatTitle/ChatTitle.vue'
 import { useUserStore } from '@/stores/user'
+import { useSearchStore } from '@/stores/search'
+import { notify } from '@kyvg/vue3-notification'
+import { watchEffect } from 'vue'
 const show = useShowStore()
 const user = useUserStore()
+const usesearch = useSearchStore()
+user.$notify = notify
+
+watchEffect(async () => {
+  await usesearch.GetAllChat()
+  // await user.getApi()
+})
 </script>
 
 <template>
@@ -29,7 +39,8 @@ const user = useUserStore()
           <div class="d-flex flex-column align-items-center">
             <ul class="nav nav-pills flex-column mb-0 align-items-center" id="menu">
               <li class="nav-item">
-                <a
+                <RouterLink
+                  to="/"
                   class="group flex h-10 items-center gap-2 rounded-lg bg-token-sidebar-surface-primary px-2 font-medium hover:bg-token-sidebar-surface-secondary"
                 >
                   <div class="h-7 w-7 flex-shrink-0">
@@ -58,50 +69,58 @@ const user = useUserStore()
                   >
                     New Search
                   </div>
-
-                  <div class="d-none d-sm-block flex gap-3">
-                    <span class="flex items-center" data-state="closed"
-                      ><button class="text-token-text-primary">
-                        <font-awesome-icon
-                          class="me-1"
-                          style="font-size: 20px"
-                          icon="fa-solid fa-pen-to-square"
-                        /></button
-                    ></span>
-                  </div>
-                </a>
+                </RouterLink>
               </li>
             </ul>
 
             <PerfectScrollbar style="height: 73vh">
               <ul v-if="show.showSidebar" class="mt-2">
-                <ChatTitle />
+                <div v-for="(chat, index) in usesearch?.listChat" :key="index">
+                  <ChatTitle :chat="chat" />
+                </div>
               </ul>
             </PerfectScrollbar>
 
-            <div v-if="user?.userInformation?.current_user_name" class="dropdown pb-4">
-              <a
-                href="#"
-                class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-                id="dropdownUser1"
+            <div v-if="user?.userInformation?.current_user_name" class="dropdown">
+              <span
+                class="sidebar__user w-100 dropdown-toggle"
+                type="button"
+                id="dropdownMenuButton1"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <img
-                  src="https://github.com/mdo.png"
-                  alt="hugenerd"
-                  width="32"
-                  height="32"
-                  class="rounded-circle"
-                />
-                <span v-if="show.showSidebar" class="mx-1 ms-2"></span>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                <li><a class="dropdown-item" @click="show.setting = true">Settings</a></li>
+                <div class="avatar">
+                  <img
+                    width="50px"
+                    src="https://i.pinimg.com/564x/c6/e5/65/c6e56503cfdd87da299f72dc416023d4.jpg"
+                    alt="avatar"
+                  />
+                </div>
+                <div class="sidebar__user-info">
+                  <div class="sidebar__user-info-top">
+                    <div class="sidebar__user-name">
+                      {{ user?.userInformation?.current_user_name }}
+                    </div>
+                    <!-- <i class="sidebar__user-icon fa-solid fa-angle-down"></i> -->
+                  </div>
+                  <div class="sidebar__user-email">
+                    {{ user?.userInformation?.current_user_email }}
+                  </div>
+                </div>
+              </span>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <li>
-                  <hr class="dropdown-divider" />
+                  <RouterLink to="/account" class="setting_btn">
+                    <i class="fa-solid fa-gear"></i> Setting
+                  </RouterLink>
                 </li>
-                <li><a class="dropdown-item" @click="user.logout()">Sign out</a></li>
+                <hr />
+                <li>
+                  <button class="setting_btn" @click="() => user.logout()">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    Sign out
+                  </button>
+                </li>
               </ul>
             </div>
 

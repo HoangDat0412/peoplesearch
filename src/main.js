@@ -4,6 +4,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { PerfectScrollbarPlugin } from 'vue3-perfect-scrollbar'
 import 'vue3-perfect-scrollbar/style.css'
+import Notifications from '@kyvg/vue3-notification'
 import App from './App.vue'
 import router from './router'
 
@@ -36,7 +37,10 @@ import {
   faMessage,
   faFileAudio,
   faFile,
-  faCheck
+  faCheck,
+  faList,
+  faAngleDown,
+  faX
 } from '@fortawesome/free-solid-svg-icons'
 
 /* add icons to the library */
@@ -62,13 +66,16 @@ library.add(
   faMessage,
   faFileAudio,
   faFile,
-  faCheck
+  faCheck,
+  faList,
+  faAngleDown,
+  faX
 )
 
 const app = createApp(App)
 app.use(PerfectScrollbarPlugin)
 app.component('font-awesome-icon', FontAwesomeIcon)
-
+app.use(Notifications)
 app.use(createPinia())
 app.use(router)
 

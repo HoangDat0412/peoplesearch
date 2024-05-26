@@ -2,7 +2,8 @@ import router from '@/router'
 import { service } from '@/service/baseService'
 import { defineStore } from 'pinia'
 import Cookies from 'js-cookie'
-import { XCSRFToken, session, token } from '@/utils/config'
+import { TOKEN, csrftoken } from '@/utils/config'
+import { notify } from '@kyvg/vue3-notification'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -16,40 +17,54 @@ export const useUserStore = defineStore('user', {
     updateSuccess: true,
 
     userUpdate: {},
+    logoutStatus: '',
     userUpdateResult: true
   }),
   getters: {},
   actions: {
     async register(data) {
       try {
-        const result = await service.post(`/Register`, data)
+        const result = await service.login(`AccountManagement/register/`, data)
         if (result?.status === 201) {
+          notify({
+            title: 'Register Success',
+            type: 'success'
+          })
           router.push({ path: '/login' })
         }
         if (result?.status === 409) {
-          alert('email đã tồn tại')
+          alert('Email already exists')
         }
       } catch (error) {
+        console.log(error?.response?.status)
         if (error?.response?.status === 409) {
-          alert('email đã tồn tại')
+          notify({
+            title: 'Email already exists ',
+            type: 'error'
+          })
+        } else if (error?.response?.status === 400) {
+          notify({
+            title:
+              'Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters.',
+            type: 'error'
+          })
         } else {
-          alert('false !')
+          notify({
+            title: 'False To Register',
+            text: 'Please Check Your Information is valid',
+            type: 'error'
+          })
           console.log(error)
         }
       }
     },
     async login(data) {
       try {
-        const result = await service.login(`/Login/`, data)
-        // console.log(result.headers['Set-Cookie'])
+        const result = await service.login(`AccountManagement/api/login/`, data)
         if (result?.status === 200) {
-          // console.log(result.data)
-          // const { sessionid } = result.data
-          // console.log('x-csrftoken', result.data['X-CSRFToken'])
-          // console.log(session, result.data.sessionid)
-          Cookies.set(session, result.data.sessionid, { expires: 30 })
-          Cookies.set(XCSRFToken, result.data['X-CSRFToken'], { expires: 30 })
-          Cookies.set(token, result.data['X-CSRFToken'], { expires: 30 })
+          Cookies.set(TOKEN, result.data.token, { expires: 30 })
+          Cookies.set(csrftoken, result.data.csrf_token, { expires: 30 })
+          router.push({ path: '/' })
         }
       } catch (error) {
         console.log(error)
@@ -59,7 +74,7 @@ export const useUserStore = defineStore('user', {
     },
     async getUserInformation() {
       try {
-        const result = await service.get(`/CurrentUserId`)
+        const result = await service.get(`API/CurrentUserId/`)
         if (result?.status === 200) {
           this.userInformation = { ...result.data }
           console.log(this.userInformation)
@@ -69,46 +84,39 @@ export const useUserStore = defineStore('user', {
         this.userInformation = false
       }
     },
-    async getApi() {
-      try {
-        const result = await service.get(`/haha`)
-        console.log(result)
-      } catch (error) {
-        console.log(error)
-      }
-    },
     async logout() {
       try {
-        const result = await service.post('/Logout')
-        if (result.status === 200) {
-          alert('Logout success !')
-          this.getUserInformation()
-        }
+        Cookies.remove(TOKEN)
+        this.$notify({
+          title: 'Success',
+          text: 'Logout Account!',
+          type: 'success'
+        })
+        this.getUserInformation()
+        router.push('/login')
       } catch (error) {
-        alert(error.message)
-      }
-    },
-    async updateUser(id, data) {
-      try {
-        const result = await service.post(`/user/update/${id}`, data)
-        if (result.status === 200) {
-          this.updateSuccess = result.data
-          alert('Update thành công')
-        } else {
-          this.updateSuccess = false
-        }
-      } catch (error) {
-        console.log(error)
+        this.$notify({
+          title: 'Error',
+          text: 'Logout Account False!',
+          type: 'error'
+        })
       }
     },
     async userUpdateInformation(data) {
       try {
-        const result = await service.post('/user/updateinformation', data)
+        const result = await service.put('AccountManagement/UpdateUsername/ ', data)
         if (result.status === 200) {
-          alert('Update success')
+          notify({
+            title: 'Update username success',
+            type: 'success'
+          })
           return this.getUserInformation()
         }
       } catch (error) {
+        notify({
+          title: 'Update username false',
+          type: 'error'
+        })
         console.log(error)
       }
     }

@@ -9,11 +9,15 @@ export const useShowStore = defineStore('show', {
     searchfile: false,
     searchaudio: false,
     titlechat: false,
-    setting: false
+    setting: false,
+    showSpiner: false
   }),
   actions: {
     async setShowSidebar(data) {
       this.showSidebar = data
+    },
+    async SetShowSpinner(data) {
+      this.showSpiner = data
     }
   }
 })

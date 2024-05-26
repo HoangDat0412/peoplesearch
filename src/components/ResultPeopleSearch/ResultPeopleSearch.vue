@@ -1,12 +1,36 @@
-<script setup></script>
+<script setup>
+const props = defineProps(['result', 'id'])
+let result = props.result
+let id = props.id
+import GalleryView from '@/components/Gallery/GalleryView.vue'
+import SearchResultItem from '@/components/SearchResultItem/SearchResultItem.vue'
+import { ref } from 'vue'
+import html2pdf from 'html2pdf.js'
+import GalleryVideo from '../GalleryVideo/GalleryVideo.vue'
+
+const pdfContent = ref(null)
+
+const generatePdf = async () => {
+  const element = pdfContent.value
+  const options = {
+    margin: 1,
+    filename: 'myfile.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+    enableLinks: true
+  }
+  html2pdf().from(element).set(options).save()
+}
+</script>
 <template>
-  <main class="container">
+  <main class="container mt-4">
     <div class="row">
-      <div class="col-auto d-flex align-items-center gap-2">
+      <div class="col-12 d-flex align-items-center gap-2">
         <img
           width="27"
           height="27"
-          src="https://cdn.sforum.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg"
+          src="https://i.pinimg.com/564x/d7/f8/2b/d7f82b61067ff83e8050a42ffea96d60.jpg"
           alt=""
           style="border-radius: 50%"
           class="img-fluid"
@@ -14,15 +38,16 @@
         <p>People Search</p>
       </div>
 
-      <div class="col-auto mt-3" style="border: solid 1px; padding: 15px">
-        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+      <div v-if="result?.length > 0" class="col-12 mt-3" style="border: solid 1px; padding: 15px">
+        <div :id="`carouselExampleControls-${id}`" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
             <div class="carousel-item active">
               <div class="d-flex flex-col md:flex-row gap-3">
-                <div>
+                <div class="col-12 col-md-3">
+                  <h2 class="text-xs mb-2">CCCD/Passport</h2>
                   <div class="people_result">
                     <img
-                      src="https://treobangron.com.vn/wp-content/uploads/2022/09/background-dep-5-2.jpg"
+                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Stylized_Vietnamese_Citizen_Identity_Card_sample.jpg/640px-Stylized_Vietnamese_Citizen_Identity_Card_sample.jpg"
                       width="100%"
                       alt=""
                     />
@@ -30,7 +55,7 @@
                     <button
                       class="btn_prev"
                       type="button"
-                      data-bs-target="#carouselExampleControls"
+                      :data-bs-target="`#carouselExampleControls-${id}`"
                       data-bs-slide="prev"
                     >
                       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -39,62 +64,100 @@
                     <button
                       class="btn_next"
                       type="button"
-                      data-bs-target="#carouselExampleControls"
+                      :data-bs-target="`#carouselExampleControls-${id}`"
                       data-bs-slide="next"
                     >
                       <span class="carousel-control-next-icon" aria-hidden="true"></span>
                       <span class="visually-hidden">Next</span>
                     </button>
                   </div>
-                  <p class="text-center">Search result : 100</p>
+                  <p class="text-center mt-1">Search result : {{ result?.length }}</p>
+
+                  <h2 class="text-xs mt-4 mb-2">Album Images</h2>
+                  <GalleryView />
+
+                  <h2 class="text-xs mt-4 mb-2">Album Video</h2>
+                  <GalleryVideo />
                 </div>
-
-                <div style="border: solid 1px; padding: 15px">
-                  <p class="mb-2">Name: Nguyễn Văn A</p>
-                  <div class="d-flex justify-between">
-                    <p>Gender: Male</p>
-                    <p>Falther: Trần Văn A</p>
+                <div class="col-12 col-md-9">
+                  <div class="me-md-3 card pdf-content" ref="pdfContent">
+                    <div class="card-body text-light">
+                      <p class="card-text mb-1">
+                        Full Name: <span>{{ result[0]?.name }}</span>
+                      </p>
+                      <div class="d-flex justify-content-between mb-1">
+                        <p>
+                          Gender: <span>{{ result[0]?.gender }}</span>
+                        </p>
+                        <p>
+                          Falther: <span>{{ result[0]?.father }}</span>
+                        </p>
+                      </div>
+                      <div class="d-flex justify-content-between mb-1">
+                        <p>
+                          Birthday: <span>{{ result[0]?.birth }}</span>
+                        </p>
+                        <p>
+                          Falther Birthday: <span>{{ result[0]?.father_birth }}</span>
+                        </p>
+                      </div>
+                      <p>
+                        CCCD/Passport: <span>{{ result[0]?.identity_id }}</span>
+                      </p>
+                      <p>
+                        Phone number: <span>{{ result[0]?.phone }}</span>
+                      </p>
+                      <p>
+                        Email: <span>{{ result[0]?.email }}</span>
+                      </p>
+                      <p>
+                        Address: <span>{{ result[0]?.address }}</span>
+                      </p>
+                      <p>
+                        Link facebook: <span>{{ result[0]?.tax_code }}</span>
+                      </p>
+                      <div class="d-flex justify-content-between mb-1">
+                        <p>
+                          IP: <span>{{ result[0]?.ip }}</span>
+                        </p>
+                        <p>
+                          Relationship: <span>{{ result[0]?.relationship }}</span>
+                        </p>
+                      </div>
+                      <div class="mt-1">
+                        <h3 class="mb-1">Bio</h3>
+                        <p class="mb-0">{{ result[0]?.biography }}</p>
+                      </div>
+                      <div class="mt-1">
+                        <h3 class="mb-2">Lastest location found</h3>
+                        <iframe
+                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.8929062797033!2d105.82203937393297!3d20.996929588873623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ac88b1bd20e7%3A0xd7065b87f7315542!2zUC4gSG_DoG5nIFbEg24gVGjDoWksIFRoYW5oIFh1w6JuLCBIw6AgTuG7mWksIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1712117570338!5m2!1svi!2s"
+                          width="150"
+                          height="120"
+                          style="border: 0"
+                          loading="lazy"
+                          referrerpolicy="no-referrer-when-downgrade"
+                        ></iframe>
+                      </div>
+                    </div>
                   </div>
-                  <div class="d-flex justify-between">
-                    <p>Age: 21</p>
-                    <p>Falther's BirthDay: 20/08/1974</p>
-                  </div>
-                  <p>CCCD/Passport:</p>
-                  <p>Phone:</p>
-                  <p>Mail:</p>
-                  <p>Address:</p>
-                  <p>MST:</p>
-                  <div class="d-flex justify-between">
-                    <p>IP:</p>
-                    <p>Relationship:</p>
-                  </div>
-
-                  <div class="mt-3">
-                    <h2>Biography</h2>
-
-                    <p class="mt-2">
-                      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corporis iste,
-                      maxime sint amet vel odio fugit maiores beatae animi obcaecati?
-                    </p>
-                  </div>
-
-                  <div class="mt-3">
-                    <h2 class="mb-2">Lastest location found</h2>
-                    <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.8929062797033!2d105.82203937393297!3d20.996929588873623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ac88b1bd20e7%3A0xd7065b87f7315542!2zUC4gSG_DoG5nIFbEg24gVGjDoWksIFRoYW5oIFh1w6JuLCBIw6AgTuG7mWksIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1712117570338!5m2!1svi!2s"
-                      width="150"
-                      height="120"
-                      style="border: 0"
-                      loading="lazy"
-                      referrerpolicy="no-referrer-when-downgrade"
-                    ></iframe>
-                  </div>
+                  <button class="button-4 mt-3" @click="generatePdf">Download File PDF</button>
                 </div>
               </div>
+            </div>
+
+            <div
+              class="carousel-item"
+              v-for="(item, key) in result.slice(1, result.length)"
+              :key="key"
+            >
+              <SearchResultItem :item="item" :resultlength="result.length" :id="id" />
             </div>
           </div>
         </div>
       </div>
+
+      <p v-else class="mt-3">Not found</p>
     </div>
   </main>
 </template>

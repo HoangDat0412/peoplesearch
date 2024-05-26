@@ -1,40 +1,63 @@
-import { DOMAIN } from '../utils/config'
+import Axios from 'axios'
+import { DOMAIN, TOKEN } from '../utils/config'
 import Cookies from 'js-cookie'
-import { session, token } from '@/utils/config'
-import axios from 'axios'
-axios.defaults.withCredentials = false
-axios.defaults.baseURL = DOMAIN
-axios.interceptors.request.use(
-  function (config) {
-    const sessionid = Cookies.get(session)
-    const csrftoken = Cookies.get(token)
-    config.headers.Cookie = `csrftoken=${csrftoken};sessionid=${sessionid}`
-    console.log(`csrftoken=${csrftoken};sessionid=${sessionid}`)
-    return config
-  },
-  function (error) {
-    return Promise.reject(error)
-  }
-)
-
 class baseService {
+  //put json về phía backend
   put = (url, model) => {
-    return axios.put(`${url}`, model)
+    return Axios({
+      url: `${DOMAIN}${url}`,
+      method: 'PUT',
+      data: model,
+      headers: { Authorization: 'Token ' + Cookies.get(TOKEN) } //JWT
+    })
   }
 
   post = (url, model) => {
-    return axios.post(`${url}`, model)
-  }
-  login = (url, model) => {
-    return axios.post(`${url}`, model)
+    return Axios({
+      url: `${DOMAIN}${url}`,
+      method: 'POST',
+      data: model,
+      headers: { Authorization: 'Token ' + Cookies.get(TOKEN) } //JWT
+    })
   }
 
-  get = (url) => {
-    return axios.get(`${url}`)
+  get = (url, model) => {
+    return Axios({
+      url: `${DOMAIN}${url}`,
+      method: 'GET',
+      data: model,
+      headers: { Authorization: 'Token ' + Cookies.get(TOKEN) } //token yêu cầu từ backend chứng minh user đã đăng nhập rồi
+    })
   }
 
   delete = (url) => {
-    return axios.delete(`${url}`)
+    return Axios({
+      url: `${DOMAIN}${url}`,
+      method: 'DELETE',
+      headers: { Authorization: 'Token ' + Cookies.get(TOKEN) } //token yêu cầu từ backend chứng minh user đã đăng nhập rồi
+    })
+  }
+
+  upload = (url, model) => {
+    return Axios({
+      url: `${DOMAIN}${url}`,
+      method: 'POST',
+      data: model,
+      headers: {
+        'content-type': 'multipart/form-data',
+        Authorization: 'Token ' + Cookies.get(TOKEN)
+      } //JWT
+    })
+  }
+  login = (url, model) => {
+    return Axios({
+      url: `${DOMAIN}${url}`,
+      method: 'POST',
+      data: model,
+      headers: {
+        'content-type': 'multipart/form-data'
+      } //JWT
+    })
   }
 }
 

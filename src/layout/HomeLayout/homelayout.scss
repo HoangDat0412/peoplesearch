@@ -36,6 +36,71 @@ a:hover {
 .sidebar {
     background-color: #212529;
     position: relative;
+    i {
+        padding: 0;
+    }
+    .open_sidebar_icon {
+        padding-top: 5px;
+        padding-left: 5px;
+        padding-right: 5px;
+        &:hover {
+            background-color: #3d4247;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+    }
+}
+.dropdown-toggle::after {
+    display: none;
+}
+.dropdown-menu {
+    background-color: #2f2f2f;
+    color: #dfdedf;
+    padding: 7px 4px;
+    li {
+        cursor: pointer;
+        padding: 7px 15px;
+    }
+}
+.sidebar__user {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+    gap: 10px;
+    padding: 10px 15px;
+    width: 100% !important;
+    &:hover {
+        background-color: #3d4247;
+        border-radius: 10px;
+        text-decoration: none;
+    }
+    .avatar {
+        img {
+            border-radius: 50%;
+        }
+    }
+    .sidebar__user-info {
+        width: 100%;
+        .sidebar__user-info-top {
+            align-items: center;
+            display: flex;
+            gap: 7px;
+            justify-items: center;
+            margin-bottom: 4px;
+            .sidebar__user-name {
+                color: #fff;
+                line-height: 22px;
+                font-size: 16px;
+                min-width: 0;
+            }
+        }
+        .sidebar__user-email {
+            color: #fff;
+            font-size: 13px;
+            line-height: 1.25;
+        }
+    }
 }
 .homelayout {
     .row > * {
@@ -88,6 +153,17 @@ a:hover {
     }
 }
 
+.btn_3 {
+    padding: 10px;
+    transition: all 0.3s;
+    background-color: #2f2f2f;
+    &:hover {
+        background-color: #3d4247;
+        border-radius: 10px;
+        text-decoration: none;
+    }
+}
+
 .ps__rail-y {
     width: 0;
     &:hover > .ps__thumb-y,
@@ -97,4 +173,112 @@ a:hover {
         width: 6px;
         /* width: 11px; */
     }
+}
+
+.button-4 {
+    appearance: none;
+    background-color: #fafbfc;
+    border: 1px solid rgba(27, 31, 35, 0.15);
+    border-radius: 6px;
+    box-shadow:
+        rgba(27, 31, 35, 0.04) 0 1px 0,
+        rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+    box-sizing: border-box;
+    color: #24292e;
+    cursor: pointer;
+    display: inline-block;
+    font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji";
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    list-style: none;
+    padding: 6px 16px;
+    position: relative;
+    transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    white-space: nowrap;
+    word-wrap: break-word;
+}
+
+.button-4:hover {
+    background-color: #f3f4f6;
+    text-decoration: none;
+    transition-duration: 0.1s;
+}
+
+.button-4:disabled {
+    background-color: #fafbfc;
+    border-color: rgba(27, 31, 35, 0.15);
+    color: #959da5;
+    cursor: default;
+}
+
+.button-4:active {
+    background-color: #edeff2;
+    box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+    transition: none 0s;
+}
+
+.button-4:focus {
+    outline: 1px transparent;
+}
+
+.button-4:before {
+    display: none;
+}
+
+.button-4:-webkit-details-marker {
+    display: none;
+}
+
+body {
+    background-color: #343a40;
+    color: #f8f9fa;
+}
+.note-card {
+    width: 100%;
+}
+.note-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #343a40;
+}
+
+.note-card .card-header {
+    background-color: #343a40;
+    color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.note-card .card-body {
+    background-color: #343a40;
+}
+
+.note-card .card-footer {
+    background-color: #343a40;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.note-card .btn-outline-secondary,
+.note-card .btn-outline-danger {
+    border-radius: 15px;
+    color: #f8f9fa;
+    border-color: #f8f9fa;
+}
+
+.note-card .btn-outline-secondary:hover,
+.note-card .btn-outline-danger:hover {
+    background-color: #f8f9fa;
+    color: #343a40;
+}
+
+.note-card .btn-primary {
+    border-radius: 15px;
 }

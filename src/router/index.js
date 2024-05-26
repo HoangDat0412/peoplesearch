@@ -6,6 +6,8 @@ import LoginView from '@/views/LoginView/LoginView.vue'
 import HomeView from '@/views/HomeView/HomeView.vue'
 import ChatView from '@/views/ChatView/ChatView.vue'
 import RegisterView from '@/views/Register/RegisterView.vue'
+import AccountLayout from '@/layout/AccountLayout/AccountLayout.vue'
+import AccountView from '@/views/Account/AccountView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,7 +23,7 @@ const router = createRouter({
           component: HomeView
         },
         {
-          path: '/chat',
+          path: '/chat/:id',
           name: 'chat',
           component: ChatView
         }
@@ -41,6 +43,18 @@ const router = createRouter({
           path: '/register',
           name: 'register',
           component: RegisterView
+        }
+      ]
+    },
+    {
+      path: '/',
+      name: 'accountlayout',
+      component: AccountLayout,
+      children: [
+        {
+          path: '/account',
+          name: 'account',
+          component: AccountView
         }
       ]
     }

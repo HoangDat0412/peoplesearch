@@ -22,11 +22,11 @@ const handleLogin = async () => {
     errorPassword.value = ''
   }
   if (!checkNull(username.value)) {
-    errUserName.value = 'password không được bỏ trống'
+    errUserName.value = 'password must be not null'
   } else {
     errUserName.value = ''
   }
-  !ValidateEmail(email.value) ? (errorEmail.value = 'email không tồn tại') : (errorEmail.value = '')
+  !ValidateEmail(email.value) ? (errorEmail.value = 'email is invalid') : (errorEmail.value = '')
 
   // const data = {
   //   email: email.value,

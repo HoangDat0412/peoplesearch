@@ -6,5 +6,9 @@
     font-size: 14px;
 }
 .chattitle {
-    font-size: 15px;
+    min-width: 220px;
+    font-size: 14px;
+    i {
+        font-size: 13px;
+    }
 }
